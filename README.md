@@ -77,3 +77,7 @@ El modelo no depende de la vista. `CivitasJuego` expone qué operaciones están 
 ## Autores
 
 Denis Valentin Stoyanov D'Antonio y Raúl Cruz Arévalo.
+
+## Licencia
+
+El código de Civitas se distribuye bajo la licencia [MIT](LICENSE). FlatLaf (`lib/flatlaf-3.7.2.jar`) mantiene su propia licencia, Apache 2.0.

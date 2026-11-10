@@ -1,83 +1,85 @@
 # Civitas
 
-Juego de mesa al estilo Monopoly escrito en Java con el patrón **Modelo-Vista-Controlador**. Lo hicimos en la asignatura de Programación y Diseño Orientado a Objetos (PDOO, curso 2021-22) y después le rehicimos la interfaz: ahora tiene un tablero isométrico animado con Swing y [FlatLaf](https://www.formdev.com/flatlaf/).
+A Monopoly-style board game written in Java with the **Model-View-Controller** pattern. We built it for the Object-Oriented Programming and Design course (PDOO, 2021-22) at the University of Granada and later rebuilt its interface: it now has an animated isometric board made with Swing and [FlatLaf](https://www.formdev.com/flatlaf/).
 
-![Partida en curso con la gestión de propiedades abierta](docs/partida.png)
+> The game's interface is in Spanish.
 
-## Cómo se juega
+![Game in progress with the property management panel open](docs/partida.png)
 
-- Juegan de **2 a 4 jugadores**. Cada uno empieza con **7.500 €** y cobra **1.000 €** cada vez que pasa por la Salida.
-- En tu turno tiras el dado y avanzas. Si caes en una **calle libre** puedes comprarla; si ya tiene dueño, le pagas el alquiler.
-- En tus calles puedes construir hasta **4 casas**. Con 4 casas puedes cambiarlas por un **hotel**. El alquiler es `base × (1 + casas + 4 × hoteles)`.
-- Puedes convertir una calle en **calle social**, que cobra un 2 % menos de alquiler.
-- Las **casillas sorpresa** roban una carta: cobrar o pagar una cantidad fija, pagar o cobrar por cada edificio, o convertirte en **Especulador** (pagas la mitad y puedes construir el doble).
-- La partida termina cuando un jugador entra en **bancarrota**. Gana quien tenga más dinero.
+## How to play
 
-## La interfaz
+- **2 to 4 players**. Each one starts with **€7,500** and collects **€1,000** every time they pass Go (*Salida*).
+- On your turn you roll the die and move. If you land on a **free street** you can buy it; if it already has an owner, you pay them rent.
+- You can build up to **4 houses** on your streets. With 4 houses you can swap them for a **hotel**. The rent is `base × (1 + houses + 4 × hotels)`.
+- You can turn a street into a **social street** (*calle social*), which charges 2% less rent.
+- **Surprise squares** draw a card: collect or pay a fixed amount, pay or collect for each building, or become a **Speculator** (*Especulador*: you pay half and can build twice as much).
+- The game ends when a player goes **bankrupt**. Whoever has the most money wins.
 
-- **Tablero isométrico** dibujado con `Graphics2D`:
-  - Cada casilla es una losa con grosor, y sus laterales se pintan del color del dueño.
-  - Las casas y los hoteles se dibujan sobre las calles.
-  - El dado es un cubo que bota al tirarlo y las fichas avanzan saltando casilla a casilla.
-- **Ficha de casilla:** al pasar el ratón por una casilla se resalta y en el lateral se ven su dueño, sus precios, el alquiler actual y los edificios.
-- **Lateral:**
-  - los jugadores, con su saldo;
-  - las acciones del turno, que solo se activan cuando están permitidas;
-  - la carta sorpresa que acaba de salir, sin diálogos que bloqueen la partida;
-  - la gestión de propiedades, con el coste de cada obra;
-  - el diario de la partida.
-- **Tema claro y oscuro:** menú *Ver → Tema oscuro* o <kbd>Cmd/Ctrl</kbd> + <kbd>Mayús</kbd> + <kbd>D</kbd>.
-- **Atajos:** <kbd>Intro</kbd> tira el dado y <kbd>Cmd/Ctrl</kbd> + <kbd>N</kbd> empieza una partida nueva.
-- **Modo debug** al crear la partida: el dado siempre saca 1, útil para probar.
+## The interface
+
+- **Isometric board** drawn with `Graphics2D`:
+  - Each square is a slab with thickness, and its sides are painted in the owner's colour.
+  - Houses and hotels are drawn on top of the streets.
+  - The die is a cube that bounces when rolled, and the tokens hop from square to square.
+- **Square card:** hovering over a square highlights it and shows its owner, prices, current rent and buildings in the side panel.
+- **Side panel:**
+  - the players, with their balance;
+  - the turn actions, which are only enabled when they are allowed;
+  - the surprise card that has just been drawn, with no dialogs blocking the game;
+  - property management, with the cost of each building;
+  - the game log.
+- **Light and dark theme:** menu *Ver → Tema oscuro* or <kbd>Cmd/Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>D</kbd>.
+- **Shortcuts:** <kbd>Enter</kbd> rolls the die and <kbd>Cmd/Ctrl</kbd> + <kbd>N</kbd> starts a new game.
+- **Debug mode** when creating a game: the die always rolls 1, handy for testing.
 
 <p>
-  <img src="docs/tema-oscuro.png" alt="Tema oscuro con la ficha de una casilla bajo el ratón" width="70%">
-  <img src="docs/nueva-partida.png" alt="Diálogo de nueva partida" width="26%">
+  <img src="docs/tema-oscuro.png" alt="Dark theme with the card of a square under the mouse" width="70%">
+  <img src="docs/nueva-partida.png" alt="New game dialog" width="26%">
 </p>
 
-## Ejecutarlo
+## Running it
 
-Hace falta un **JDK 21** o posterior. En macOS, por ejemplo:
+You need **JDK 21** or later. On macOS, for example:
 
 ```bash
 brew install openjdk@21
 ```
 
-Después, desde la raíz del proyecto:
+Then, from the project root:
 
 ```bash
 ./run.sh
 ```
 
-El script compila el código en `build/classes` y lanza el juego. Usa `JAVA_HOME` si está definido y, si no, el JDK 21 de Homebrew.
+The script compiles the code into `build/classes` and launches the game. It uses `JAVA_HOME` if it is set and, otherwise, Homebrew's JDK 21.
 
-También se puede abrir como proyecto de **NetBeans** (Ant): FlatLaf ya está en el classpath y la clase principal es `GUI.CivitasApp`.
+It can also be opened as a **NetBeans** (Ant) project: FlatLaf is already on the classpath and the main class is `GUI.CivitasApp`.
 
-## Estructura
+## Structure
 
 ```
 src/
-├── civitas/             Modelo: tablero, casillas, jugadores, sorpresas,
-│                        dado, diario y la máquina de estados del turno
-├── controladorCivitas/  Controlador por eventos: recibe las acciones de la
-│                        vista, las ejecuta en el modelo y refresca la vista
-└── GUI/                 Vista en Swing + FlatLaf
-    ├── CivitasApp           punto de entrada
-    ├── CivitasView          ventana principal (implementa Vista)
-    ├── TableroIsometrico    tablero, animaciones y ratón
-    ├── Panel*               jugadores, acciones, ficha de casilla y diario
-    ├── Dialogo*             nueva partida y fin de partida
-    └── Tema                 colores claros y oscuros
+├── civitas/             Model: board, squares, players, surprises,
+│                        die, log and the turn state machine
+├── controladorCivitas/  Event-driven controller: receives the actions from
+│                        the view, runs them on the model and refreshes the view
+└── GUI/                 View in Swing + FlatLaf
+    ├── CivitasApp           entry point
+    ├── CivitasView          main window (implements Vista)
+    ├── TableroIsometrico    board, animations and mouse
+    ├── Panel*               players, actions, square card and log
+    ├── Dialogo*             new game and end of game
+    └── Tema                 light and dark colours
 lib/
-└── flatlaf-3.7.2.jar    look and feel (licencia Apache 2.0)
+└── flatlaf-3.7.2.jar    look and feel (Apache 2.0 licence)
 ```
 
-El modelo no depende de la vista. `CivitasJuego` expone qué operaciones están permitidas en cada momento (`puedeAvanzar()`, `puedeComprar()`, `puedeConstruirHotel(ip)`…), y la vista usa esa información para activar o desactivar sus botones. `GestorEstados` decide cómo cambia el estado del turno después de cada operación.
+The model does not depend on the view. `CivitasJuego` exposes which operations are allowed at each moment (`puedeAvanzar()`, `puedeComprar()`, `puedeConstruirHotel(ip)`…), and the view uses that information to enable or disable its buttons. `GestorEstados` decides how the turn state changes after each operation.
 
-## Autores
+## Authors
 
-Denis Valentin Stoyanov D'Antonio y Raúl Cruz Arévalo.
+Denis Valentin Stoyanov D'Antonio and Raúl Cruz Arévalo.
 
-## Licencia
+## Licence
 
-El código de Civitas se distribuye bajo la licencia [MIT](LICENSE). FlatLaf (`lib/flatlaf-3.7.2.jar`) mantiene su propia licencia, Apache 2.0.
+Civitas' code is distributed under the [MIT](LICENSE) licence. FlatLaf (`lib/flatlaf-3.7.2.jar`) keeps its own licence, Apache 2.0.
